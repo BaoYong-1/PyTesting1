@@ -10,7 +10,10 @@ os.environ['NLS_LANG'] = 'SIMPLIFIED CHINESE_CHINA.UTF8'  # 设置中文
 
 
 def get_code(driver, codeEelement):
-    driver.save_screenshot('verifyCode.png')  # 截取当前网页，该网页有我们需要的验证码
+    scrpath = 'F:\\PyTesting\\AutoTset\\log'  # 指定的保存目录
+    capturename = '\\' + 'verifyCode.png'  # 自定义命名截图
+    wholepath = scrpath + capturename
+    driver.save_screenshot(wholepath)  # 截取当前网页，该网页有我们需要的验证码
     # 获取验证码x,y轴坐标
     location = imgelement.location
     # 获取验证码的长宽
@@ -19,22 +22,25 @@ def get_code(driver, codeEelement):
     rangle = (
     int(location['x']), int(location['y']), int(location['x'] + size['width']), int(location['y'] + size['height']))
     # 打开截图
-    i = Image.open('verifyCode.png')
+    i = Image.open(wholepath)
     # 使用Image的crop函数，从截图中再次截取我们需要的区域
     imgry = i.crop(rangle)  # 使用Image的crop函数，从截图中再次截取我们需要的区域
-    imgry.save('getVerifyCode.png')
-    im = Image.open('getVerifyCode.png')
+    capturename1 = '\\' + 'getVerifyCode.png'  # 自定义命名截图
+    wholepath1 = scrpath + capturename1
+    imgry.save(wholepath1)
+    im = Image.open(wholepath1)
     im = im.convert('L')  # 图像加强，二值化
     sharpness = ImageEnhance.Contrast(im)  # 对比度增强
     sharp_img = sharpness.enhance(2.0)
-    sharp_img.save("newVerifyCode.png")
-    newVerify = Image.open('newVerifyCode.png')
+    capturename2 = '\\' + 'newVerifyCode.png'  # 自定义命名截图
+    wholepath2 = scrpath + capturename2
+    sharp_img.save(wholepath2)
+    newVerify = Image.open(wholepath2)
     # 使用image_to_string识别验证码
     CodeText = image_to_string(newVerify).strip()
     # text = image_to_string('newVerifyCode.png').strip()
     print(CodeText)
     return CodeText
-
 
 def login(driver, user, passwd, CodeText):
     driver.find_element_by_id("txt_username").clear()
@@ -59,6 +65,22 @@ def login(driver, user, passwd, CodeText):
         print('登录失败！')
 
 
+def login_out(driver):
+    driver.find_element_by_id("gps_main_quit_span_w").click()
+    time.sleep(2)
+    driver.find_element_by_xpath("//body//div//div//div//button/span[./text()='确定']").click()
+    print("退出成功！")
+
+
+def getData(driver):
+    driver.find_element_by_id("gps_toolbar_leftbutton_div_w").click()
+    driver.find_element_by_id("gps_main_menu_report_s_p").click()
+
+    driver.find_element_by_xpath("//*[text()='上离线报表']").click()
+    time.sleep(2)
+
+
+
 if __name__ == '__main__':
     options = webdriver.ChromeOptions()
     options.add_experimental_option("excludeSwitches", ["ignore-certificate-errors"])
@@ -68,5 +90,7 @@ if __name__ == '__main__':
     driver.get(url)
     imgelement = driver.find_element_by_id("verifyCodeImg")
     CodeText = get_code(driver, imgelement)
-    login(driver, 'admin1', 'asdf1234', CodeText)
+    login(driver, 'baoyong', 'asdf1234', CodeText)
+    getData(driver)
+    login_out(driver)
     driver.quit()
