@@ -9,7 +9,8 @@ import os
 os.environ['NLS_LANG'] = 'SIMPLIFIED CHINESE_CHINA.UTF8'  # 设置中文
 
 
-def get_code(driver, codeEelement):
+def get_code(driver):
+    imgelement = driver.find_element_by_id("verifyCodeImg")
     scrpath = 'F:\\PyTesting\\AutoTset\\log'  # 指定的保存目录
     capturename = '\\' + 'verifyCode.png'  # 自定义命名截图
     wholepath = scrpath + capturename
@@ -75,11 +76,9 @@ def login_out(driver):
 def getData(driver):
     driver.find_element_by_id("gps_toolbar_leftbutton_div_w").click()
     driver.find_element_by_id("gps_main_menu_report_s_p").click()
-
-    driver.find_element_by_xpath("//*[text()='上离线报表']").click()
+    time.sleep(2)  # 等待元素加载
+    driver.find_element_by_xpath("//*[@id='online']//div[1]//li[2]/a").click()
     time.sleep(2)
-
-
 
 if __name__ == '__main__':
     options = webdriver.ChromeOptions()
@@ -88,8 +87,7 @@ if __name__ == '__main__':
     driver.maximize_window()
     url = "http://192.168.10.110:8080/WebGis/login"
     driver.get(url)
-    imgelement = driver.find_element_by_id("verifyCodeImg")
-    CodeText = get_code(driver, imgelement)
+    CodeText = get_code(driver)
     login(driver, 'baoyong', 'asdf1234', CodeText)
     getData(driver)
     login_out(driver)
