@@ -88,7 +88,7 @@ if __name__ == '__main__':
     url = "http://192.168.10.110:8080/WebGis/login"
     driver.get(url)
     CodeText = get_code(driver)
-    login(driver, 'baoyong', 'asdf1234', CodeText)
+    login(driver, 'baoyong123', 'asdf1234', CodeText)
     getData(driver)
     login_out(driver)
     driver.quit()
