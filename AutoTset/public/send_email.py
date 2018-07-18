@@ -27,21 +27,21 @@ def sendEmail(content, title, from_name, from_address, to_address, serverport, s
 def main2():
     TO = ['baoyong@sdgakj.com']
     config = {
-        "from": "534138762@qq.com",
+        "from": "13678678012@163.com",
         "from_name": '自动化测试_测试框架报告:',
         "to": TO,
-        "serverip": "smtp.qq.com",
+        "serverip": "smtp.163.com",
         "serverport": "465",
-        "username": "534138762@qq.com",
-        "password": "jihfsvsgzfzecahf"  # QQ邮箱的SMTP授权码
+        "username": "13678678012@163.com",
+        "password": "13678678012by"  # 网易邮箱的SMTP授权码
     }
 
     title = "自动化测试_测试框架报告"
-    f = open("F:\\PyTesting\\AutoTset\\report\\result.html", 'rb')
+    # now = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+    # f = open('F:\\PyTesting\\AutoTset\\report\\'+now+'Test_result.html', 'rb')
+    f = open('F:\\PyTesting\\AutoTset\\report\\Test_result.html', 'rb')
     mail_body = f.read()
     f.close()
     sendEmail(mail_body, title, config['from_name'], config['from'], config['to'], config['serverport'],
               config['serverip'],
               config['username'], config['password'])
-
-# main2()

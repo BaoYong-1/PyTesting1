@@ -1,5 +1,6 @@
 # coding=utf-8
 import time
+import unittest
 from selenium import webdriver
 from GetVerifyCode import get_code
 import os
@@ -7,16 +8,15 @@ import os
 os.environ['NLS_LANG'] = 'SIMPLIFIED CHINESE_CHINA.UTF8'  # 设置中文
 
 
-def login(driver, user, passwd, CodeText):
+def login(driver, username, password, CodeText):
     driver.find_element_by_id("txt_username").clear()
-    driver.find_element_by_id("txt_username").send_keys(user)
+    driver.find_element_by_id("txt_username").send_keys(username)
     driver.find_element_by_id("txt_password").clear()
-    driver.find_element_by_id("txt_password").send_keys(passwd)
+    driver.find_element_by_id("txt_password").send_keys(password)
     driver.find_element_by_id("verifycode").clear()
     driver.find_element_by_id("verifycode").send_keys(CodeText)
     driver.find_element_by_class_name("button").click()
     time.sleep(5)
-
 
 if __name__ == '__main__':
     options = webdriver.ChromeOptions()

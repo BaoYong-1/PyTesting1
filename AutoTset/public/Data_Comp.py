@@ -6,17 +6,16 @@ l_p = []  # 定义两个全局list，分别存储原始和目的需要对比的�
 l_t = []
 
 
-def read_excel():
-    scrpath = 'F:\\PyTesting\\AutoTset\\log\\'
-    wb_pri = xlrd.open_workbook(scrpath + 'chart1.xls')  # 打开原始文件
-    wb_tar = xlrd.open_workbook(scrpath + 'GPS_TARG.xlsx')  # 打开目标文件
+def test_read_excel():
+    scrpath = 'F:\\PyTesting\\AutoTset\\log\\excel\\'
+    wb_pri = xlrd.open_workbook(scrpath + 'GPS_TARG.xls')  # 打开原始文件
+    wb_tar = xlrd.open_workbook(scrpath + 'GPS_TARG_DB.xlsx')  # 打开目标文件
     wb_result = xlwt.Workbook()  # 新建一个文件，用来保存结果
-    sheet_result = wb_result.add_sheet('result', cell_overwrite_ok=True)
+    sheet_result = wb_result.add_sheet('Como_result', cell_overwrite_ok=True)
     result_i = 0
     result_j = 0
     sheet_pri = wb_pri.sheet_by_index(0)
     sheet_tar = wb_tar.sheet_by_index(0)
-    print(sheet_pri.name, sheet_tar.name)
     # 为什么是取这一列，因为这就是需要对比的数据阿
     l_p = sheet_pri.col_values(1)
     l_t = sheet_tar.col_values(1)
@@ -40,8 +39,15 @@ def read_excel():
         sheet_result.write(result_j, 3, td_i)
 
     # 好了，可以去名为result的excel中查看结果了
-    wb_result.save(scrpath + 'result.xls')
+    wb_result.save(scrpath + 'Comp_result.xls')
+    excle = xlrd.open_workbook(scrpath + 'Comp_result.xls')
+    sheet = excle.sheets()[0]  # 获取第0个表
+    n = sheet.nrows
+    if n >= 3:
+        print("页面数据和数据库数据不一致！")
+    else:
+        print("页面数据和数据库数据一致！")
 
 
 if __name__ == '__main__':
-    read_excel()
+    test_read_excel()
