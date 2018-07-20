@@ -1,24 +1,21 @@
 # coding:utf-8
 import unittest
 import os
-import BSTestRunner
-import sys
-
-sys.path.append('F:\\PyTesting\\AutoTset\\public')
-from send_email import main2
+import HTMLTestRunnerCN
 import time
+import sys
+sys.path.append('F:\\PyTesting\\AutoTset\\public')
+from Send_mail import sendMail
+from Send_mail import new_file
 
 
 def createsuit():
     # 创建测试用例集
     testcase = unittest.TestSuite()
-    # 判断是否为测试用例，自动加载测试用例到测试套件中
-    # case_path = os.path.join(os.getcwd(),'case')
-    case_dir = "F:\PyTesting\AutoTset\\test\case\\report_forms"
     # discover方法定义
-    print(case_dir)
-    discover = unittest.defaultTestLoader.discover(case_dir, pattern='test_*.py', top_level_dir=None)
     # discover方法筛选出来的用例，循环添加到测试套件中
+    discover = unittest.defaultTestLoader.discover(case_dir, pattern='test_*.py', top_level_dir=None)
+    # 判断是否为测试用例，自动加载测试用例到测试套件中
     for test_suite in discover:
         for test_case in test_suite:
             # 添加用例到testcase
@@ -26,14 +23,19 @@ def createsuit():
             testcase.addTest(test_case)
     return testcase
 
-
 if __name__ == "__main__":
-    # now = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-    # report_path = 'F:\\PyTesting\\AutoTset\\report\\'+now+'Test_result.html'
-    report_path = 'F:\\PyTesting\\AutoTset\\report\\Test_result.html'
-    fp = open(report_path, "wb")
-    runner = BSTestRunner.BSTestRunner(stream=fp, title="自动化测试_测试框架报告", description="用例执行情况：")
-    # runner.run(createsuit())
-    print(createsuit())
+    global case_dir
+    case_dir = "F:\\PyTesting\\AutoTset\\test\\case\\loginouttest\\"
+    now = time.strftime('%Y-%m-%d_%H_%M_%S_')
+    report_path = 'F:\\PyTesting\\AutoTset\\report\\'
+    filename = report_path + '\\' + now + 'result.html'
+    fp = open(filename, "wb")
+    runner = HTMLTestRunnerCN.HTMLTestReportCN(stream=fp, title="自动化测试_测试框架报告", description="用例执行情况(详情见附件)：",
+                                               tester=u"测试部")
+    runner.run(createsuit())
     fp.close()
-    # main2()  # from send_email import main2  发送邮件！
+    attachment = new_file(report_path)
+    f = open(attachment, 'rb')
+    mail_body = f.read()
+    f.close()
+    sendMail(mail_body)
