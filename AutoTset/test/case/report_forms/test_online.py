@@ -6,14 +6,14 @@ import xlrd  # 读取excel
 import os
 import time
 import cx_Oracle
+import unittest
 from openpyxl import Workbook
 import sys
-
 sys.path.append('F:\\PyTesting\\AutoTset\\public')
 from Login_c import login
 from GetVerifyCode import get_code
 from Data_Comp import test_read_excel
-import unittest
+from Get_DB_Data import export
 
 
 class Test_online(unittest.TestCase):
@@ -45,6 +45,7 @@ class Test_online(unittest.TestCase):
         driver = cls.driver
         CodeText = get_code(driver)
         login(driver, 'baoyong123', 'asdf1234', CodeText)  # 正确用户名和密码
+
         driver.implicitly_wait(10)  # 隐式等待
         username = driver.find_element_by_id("gps_main_username_span_w").text
         conn = cx_Oracle.connect('gpsadmin/gpsadmin_123654@ 192.168.10.110: 1521 / ora11g')  # 连接数据库
@@ -129,34 +130,37 @@ class Test_online(unittest.TestCase):
 
     def test_4get_dbdata(cls):
         '''获取数据库中的数据'''
-        conn = cx_Oracle.connect('gpsadmin/gpsadmin_123654@ 192.168.10.110: 1521 / ora11g')  # 连接数据库
-        cursor = conn.cursor()
-        count = cursor.execute(
-            "select p.v_user_account,q.v_targ_name from GPS_USER p,GPS_TARG q where p.v_dept_id=q.v_dept_id and p.v_user_account='baoyong123'")
-        # 重置游标的位置
-        # cursor.scroll(0,mode='absolute')
-        # 搜取所有结果
-        results = cursor.fetchall()
-
-        # 获取oracle里面的数据字段名称
-        fields = cursor.description
-        workbook = xlwt.Workbook()
-        sheet = workbook.add_sheet('DB_data', cell_overwrite_ok=True)
-
-        # 写上字段信息
-        for field in range(0, len(fields)):
-            sheet.write(0, field, fields[field][0])
-
-        # 获取并写入数据段信息
-        row = 1
-        col = 0
-        for row in range(1, len(results) + 1):
-            for col in range(0, len(fields)):
-                sheet.write(row, col, u'%s' % results[row - 1][col])
-        scrpath = 'F:\\PyTesting\\AutoTset\\log\\excel\\'  # 指定的保存目录
-        workbook.save(scrpath + r'GPS_TARG_DB.xlsx')
-        cursor.close()
-        conn.close()
+        sql = "select p.v_user_account,q.v_targ_name from GPS_USER p,GPS_TARG q where p.v_dept_id=q.v_dept_id and p.v_user_account='baoyong123'"
+        scrpath = "F:\\PyTesting\\AutoTset\\log\\excel\\"  # 指定的保存目录
+        export(sql, scrpath + r'GPS_TARG_DB.xlsx')
+        # conn = cx_Oracle.connect('gpsadmin/gpsadmin_123654@ 192.168.10.110: 1521 / ora11g')  # 连接数据库
+        # cursor = conn.cursor()
+        # count = cursor.execute(
+        #     "select p.v_user_account,q.v_targ_name from GPS_USER p,GPS_TARG q where p.v_dept_id=q.v_dept_id and p.v_user_account='baoyong123'")
+        # # 重置游标的位置
+        # # cursor.scroll(0,mode='absolute')
+        # # 搜取所有结果
+        # results = cursor.fetchall()
+        #
+        # # 获取oracle里面的数据字段名称
+        # fields = cursor.description
+        # workbook = xlwt.Workbook()
+        # sheet = workbook.add_sheet('DB_data', cell_overwrite_ok=True)
+        #
+        # # 写上字段信息
+        # for field in range(0, len(fields)):
+        #     sheet.write(0, field, fields[field][0])
+        #
+        # # 获取并写入数据段信息
+        # row = 1
+        # col = 0
+        # for row in range(1, len(results) + 1):
+        #     for col in range(0, len(fields)):
+        #         sheet.write(row, col, u'%s' % results[row - 1][col])
+        # scrpath = 'F:\\PyTesting\\AutoTset\\log\\excel\\'  # 指定的保存目录
+        # workbook.save(scrpath + r'GPS_TARG_DB.xlsx')
+        # cursor.close()
+        # conn.close()
         print("获取数据库数据成功！")
 
     def test_5get_dbdata(cls):

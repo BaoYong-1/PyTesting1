@@ -1,11 +1,21 @@
 # coding=utf-8
 import time
-import unittest
+from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 from GetVerifyCode import get_code
 import os
-
 os.environ['NLS_LANG'] = 'SIMPLIFIED CHINESE_CHINA.UTF8'  # 设置中文
+
+
+def is_element_visible(self, element):
+    driver = self.driver
+    try:
+        the_element = EC.visibility_of_element_located(element)
+        assert the_element(driver)
+        flag = True
+    except:
+        flag = False
+    return flag
 
 
 def login(driver, username, password, CodeText):
@@ -16,7 +26,7 @@ def login(driver, username, password, CodeText):
     driver.find_element_by_id("verifycode").clear()
     driver.find_element_by_id("verifycode").send_keys(CodeText)
     driver.find_element_by_class_name("button").click()
-    time.sleep(5)
+    time.sleep(2)
 
 if __name__ == '__main__':
     options = webdriver.ChromeOptions()

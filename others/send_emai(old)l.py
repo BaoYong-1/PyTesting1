@@ -1,5 +1,3 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 import smtplib
 import os
 import time
@@ -8,7 +6,6 @@ from email.mime.multipart import MIMEMultipart
 from email.header import Header
 from email import encoders
 from email.mime.base import MIMEBase
-from email.utils import parseaddr, formataddr
 
 
 def new_file(test_dir):
@@ -23,26 +20,8 @@ def new_file(test_dir):
     return file_path
 
 
-# 格式化邮件地址
-def formatAddr(s):
-    name, addr = parseaddr(s)
-    return formataddr((Header(name, 'utf-8').encode(), addr))
-
-
-def sendMail(body):
-    smtp_server = 'smtp.163.com'
-    from_mail = '13678678012@163.com'
-    mail_pass = '13678678012by'
-    to_mail = ['534138762@qq.com', 'baoyong@sdgakj.com']
-    # 构造一个MIMEMultipart对象代表邮件本身
+def sendEmail(content, title, from_name, from_address, to_address, serverport, serverip, username, password):
     msg = MIMEMultipart()
-    # Header对中文进行转码
-    msg['From'] = formatAddr('测试部 <%s>' % from_mail)
-    msg['To'] = ','.join(to_mail)
-    msg['Subject'] = Header('卫星定位平台自动化测试报告', 'utf-8')
-    # plain代表纯文本;html代表网页
-    msg.attach(MIMEText(body, _subtype='html', _charset='utf-8'))
-    # 二进制方式模式文件
     report_path = 'F:\\PyTesting\\AutoTset\\report\\'
     attachment = new_file(report_path)
     attachment1 = os.path.basename(new_file(report_path))
@@ -56,22 +35,38 @@ def sendMail(body):
         encoders.encode_base64(mime)
         # 作为附件添加到邮件
         msg.attach(mime)
+    # 这里的to_address只用于显示，必须是一个string
+    msg = MIMEText(content, _subtype='html', _charset='utf-8')
+    msg['Subject'] = Header(title, 'utf-8')
+    msg['To'] = ','.join(to_address)
+    msg['From'] = from_name
     try:
-        s = smtplib.SMTP()
-        s.connect(smtp_server, "25")
-        s.login(from_mail, mail_pass)
-        s.sendmail(from_mail, to_mail, msg.as_string())  # as_string()把MIMEText对象变成str
+        s = smtplib.SMTP_SSL(serverip, serverport)
+        s.login(username, password)
+        # 这里的to_address是真正需要发送的到的mail邮箱地址需要的是一个list
+        s.sendmail(from_address, to_address, msg.as_string())
         print('%s----发送邮件成功' % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
-        s.quit()
     except Exception as err:
         print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
         print(err)
 
 
-if __name__ == "__main__":
-    report_path = 'F:\\PyTesting\\AutoTset\\report\\'
-    attachment = new_file(report_path)
-    f = open(attachment, 'rb')
+# HEFEN_D = pth.abspath(pth.dirname(__file__))
+
+def main2(newreport):
+    TO = ['baoyong@sdgakj.com']  # 可以添加多人的邮件地址
+    config = {
+        "from": "13678678012@163.com",
+        "from_name": '测试部:',
+        "to": TO,
+        "serverip": "smtp.163.com",
+        "serverport": "465",
+        "username": "13678678012@163.com",
+        "password": "13678678012by"  # 网易邮箱的SMTP授权码
+    }
+    f = open(newreport, 'rb')
+    title = "自动化测试_测试框架报告"
     mail_body = f.read()
     f.close()
-    sendMail(mail_body)
+    sendEmail(mail_body, title, config['from_name'], config['from'], config['to'], config['serverport'],
+              config['serverip'], config['username'], config['password'])

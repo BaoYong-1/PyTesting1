@@ -65,14 +65,14 @@ class Test(unittest.TestCase):
         time.sleep(2)
         error_message = self.dr.find_element_by_xpath("//body//div//div[./text()='用户名或密码错误，请重新输入！']").text
         self.assertIn('用户名或密码错误，请重新输入！', error_message)  # 用assertIn(a,b)方法来断言 a in b  '用户名或密码错误'在error_message里
-        self.dr.get_screenshot_as_file("F:\\PyTesting\\AutoTset\\log\\login_pwd_error.png")
+        self.dr.get_screenshot_as_file("F:\\PyTesting\\AutoTset\\log\\png\\login_pwd_error.png")
 
     def test_login_pwd_null(self):
         '''用户名正确、密码为空'''
         self.login('baoyong123', '', '')  # 密码为空,验证码为空
         error_message = self.dr.find_element_by_xpath("//body//div//div[./text()='请输入密码后继续！']").text
         self.assertEqual(error_message, '请输入密码后继续！')  # 用assertEqual(a,b)方法来断言  a == b  请输入密码等于error_message
-        self.dr.get_screenshot_as_file("F:\\PyTesting\\AutoTset\\log\\login_pwd_null.png")
+        self.dr.get_screenshot_as_file("F:\\PyTesting\\AutoTset\\log\\png\\login_pwd_null.png")
 
     def test_login_user_error(self):
         '''用户名错误、密码正确'''
@@ -82,7 +82,7 @@ class Test(unittest.TestCase):
         time.sleep(2)
         error_message = self.dr.find_element_by_xpath("//body//div//div[./text()='用户名或密码错误，请重新输入！']").text
         self.assertIn('用户名或密码错误，请重新输入！', error_message)  # 用assertIn(a,b)方法来断言 a in b
-        self.dr.get_screenshot_as_file("F:\\PyTesting\\AutoTset\\log\\login_user_error.png")
+        self.dr.get_screenshot_as_file("F:\\PyTesting\\AutoTset\\log\\png\\login_user_error.png")
 
     def test_login_user_null(self):
         '''用户名为空、密码正确'''
@@ -91,8 +91,15 @@ class Test(unittest.TestCase):
         self.login('', 'asdf1234', CodeText)  # 用户名为空，密码正确,验证码正确
         error_message = self.dr.find_element_by_xpath("//body//div//div[./text()='请输入用户名后继续！']").text
         self.assertEqual(error_message, '请输入用户名后继续！')  # 用assertEqual(a,b)方法来断言  a == b
-        self.dr.get_screenshot_as_file("F:\\PyTesting\\AutoTset\\log\\login_user_null.png")
+        self.dr.get_screenshot_as_file("F:\\PyTesting\\AutoTset\\log\\png\\login_user_null.png")
 
+    def test_login_code_error(self):
+        '''用户名密码正确、验证码错误'''
+        driver = self.dr
+        self.login('baoyong123', 'asdf1234', 'aaaa')  # 用户名密码正确、验证码错误
+        error_message = self.dr.find_element_by_xpath("//body//div//div[./text()='验证码输入有误，请重新输入！']").text
+        self.assertEqual(error_message, '验证码输入有误，请重新输入！')  # 用assertEqual(a,b)方法来断言  a == b
+        self.dr.get_screenshot_as_file("F:\\PyTesting\\AutoTset\\log\\png\\login_user_code_error.png")
 
 if __name__ == "__main__":
     unittest.main()

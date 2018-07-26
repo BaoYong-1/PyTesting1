@@ -25,15 +25,16 @@ def createsuit():
 
 if __name__ == "__main__":
     global case_dir
-    case_dir = "F:\\PyTesting\\AutoTset\\test\\case\\loginouttest\\"
+    case_dir = "F:\\PyTesting\\AutoTset\\test\\case\\logintest\\"
     now = time.strftime('%Y-%m-%d_%H_%M_%S_')
     report_path = 'F:\\PyTesting\\AutoTset\\report\\'
     filename = report_path + '\\' + now + 'result.html'
-    fp = open(filename, "wb")
+    fp = open(filename, "wb")  # 创测试报告的html文件，此时还是个空文件
+    # 定义HTMLTestRunner测试报告，stream定义报告所写入的文件；title为报告的标题；description为报告的说明与描述
     runner = HTMLTestRunnerCN.HTMLTestReportCN(stream=fp, title="自动化测试_测试框架报告", description="用例执行情况(详情见附件)：",
                                                tester=u"测试部")
-    runner.run(createsuit())
-    fp.close()
+    runner.run(createsuit())  # 运行测试容器中的用例，并将结果写入的报告中
+    fp.close()  # 关闭文件流，不关的话生成的报告是空的
     attachment = new_file(report_path)
     f = open(attachment, 'rb')
     mail_body = f.read()
