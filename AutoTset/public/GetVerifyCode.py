@@ -43,7 +43,7 @@ def get_code(driver):
     im.close()
     newVerify.close()
 
-    print("登录验证码：", CodeText)
+    print("获取登录验证码：", CodeText)
     return CodeText
 
 

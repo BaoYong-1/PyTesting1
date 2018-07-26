@@ -9,7 +9,6 @@ def export(sql, outputpath):
     conn = cx_Oracle.connect('gpsadmin/gpsadmin_123654@ 192.168.10.110: 1521 / ora11g')  # 连接数据库
     cursor = conn.cursor()
     count = cursor.execute(sql)
-    print(count)
     # 重置游标的位置
     # cursor.scroll(0,mode='absolute')
     # 搜取所有结果

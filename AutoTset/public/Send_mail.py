@@ -39,7 +39,7 @@ def sendMail(body):
     # Header对中文进行转码
     msg['From'] = formatAddr('测试部 <%s>' % from_mail)
     msg['To'] = ','.join(to_mail)
-    msg['Subject'] = Header('卫星定位平台自动化测试报告', 'utf-8')
+    msg['Subject'] = Header('卫星定位平台BS自动化测试报告', 'utf-8')
     # plain代表纯文本;html代表网页
     msg.attach(MIMEText(body, _subtype='html', _charset='utf-8'))
     # 二进制方式模式文件

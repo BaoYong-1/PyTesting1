@@ -68,6 +68,7 @@ class Test_online(unittest.TestCase):
         time.sleep(2)  # 等待元素加载
         driver.find_element_by_xpath("//*[@id='online']//div[1]//li[2]/a").click()
         time.sleep(2)
+        print("页面跳转成功！")
 
     def test_3switch_page(cls):
         '''分页跳转,获取分页中的所有数据'''
@@ -86,6 +87,7 @@ class Test_online(unittest.TestCase):
                     "//*[@id='_T202758']/td/div/div[3]/div/div/table/tbody/tr/td[3]/div/table/tbody/tr/td[" + str(
                         i + 1) + "]/div")
                 cls.load_Table(i)
+                print("获取报表第" + str(i + 1) + "页数据成功！")
         else:
             for i in range(t - 7):
                 driver.find_element_by_xpath(
@@ -126,7 +128,6 @@ class Test_online(unittest.TestCase):
                     newWs.write(i + page * row, j, tc.text)
                     os.remove(excel)
                     newWb.save(excel)
-        print('获取报表数据成功！')
 
     def test_4get_dbdata(cls):
         '''获取数据库中的数据'''
