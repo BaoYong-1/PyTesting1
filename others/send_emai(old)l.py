@@ -22,7 +22,7 @@ def new_file(test_dir):
 
 def sendEmail(content, title, from_name, from_address, to_address, serverport, serverip, username, password):
     msg = MIMEMultipart()
-    report_path = 'F:\\PyTesting\\AutoTset\\report\\'
+    report_path = 'F:\\PyTesting\\AutoTest\\report\\'
     attachment = new_file(report_path)
     attachment1 = os.path.basename(new_file(report_path))
     with open(attachment, 'rb') as f:

@@ -11,7 +11,7 @@ os.environ['NLS_LANG'] = 'SIMPLIFIED CHINESE_CHINA.UTF8'  # 设置中文
 
 def get_code(driver):
     imgelement = driver.find_element_by_id("verifyCodeImg")
-    scrpath = 'F:\\PyTesting\\AutoTset\\log'  # 指定的保存目录
+    scrpath = 'F:\\PyTesting\\AutoTest\\log'  # 指定的保存目录
     capturename = '\\' + 'verifyCode.png'  # 自定义命名截图
     wholepath = scrpath + capturename
     driver.save_screenshot(wholepath)  # 截取当前网页，该网页有我们需要的验证码

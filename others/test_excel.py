@@ -6,7 +6,7 @@ from datetime import date, datetime
 
 def read_excel():
     # 打开文件
-    scrpath = 'F:\\PyTesting\\AutoTset\\log\\excel\\'
+    scrpath = 'F:\\PyTesting\\AutoTest\\log\\excel\\'
     workbook = xlrd.open_workbook(scrpath + 'Comp_result.xls')
     # 获取所有sheet
     print(workbook.sheet_names())  # [u'sheet1', u'sheet2']

@@ -3,10 +3,8 @@ import unittest
 from selenium import webdriver
 import sys
 
-sys.path.append('F:\\PyTesting\\AutoTset\\public')
+sys.path.append('F:\\PyTesting\\AutoTest\\public')
 from GetVerifyCode import get_code
-
-sys.path.append('F:\\PyTesting\\AutoTset\\public')
 from Login_c import login
 import time
 import cx_Oracle
@@ -31,7 +29,7 @@ class Test_out(unittest.TestCase):
         time.sleep(3)
         message = self.dr.find_element_by_xpath("//html//body//div[@class='middle']").text
         self.assertIn('山东广安车联科技股份有限公司', message)
-        self.dr.get_screenshot_as_file("F:\\PyTesting\\AutoTset\\log\\png\\login_out.png")
+        self.dr.get_screenshot_as_file("F:\\PyTesting\\AutoTest\\log\\png\\login_out.png")
         print("退出成功！")
 
     def tearDown(self):

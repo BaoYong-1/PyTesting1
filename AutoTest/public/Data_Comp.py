@@ -7,7 +7,7 @@ l_t = []
 
 
 def test_read_excel():
-    scrpath = 'F:\\PyTesting\\AutoTset\\log\\excel\\'
+    scrpath = 'F:\\PyTesting\\AutoTest\\log\\excel\\'
     wb_pri = xlrd.open_workbook(scrpath + 'GPS_TARG.xls')  # 打开原始文件
     wb_tar = xlrd.open_workbook(scrpath + 'GPS_TARG_DB.xlsx')  # 打开目标文件
     wb_result = xlwt.Workbook()  # 新建一个文件，用来保存结果

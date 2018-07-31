@@ -43,7 +43,7 @@ def sendMail(body):
     # plain代表纯文本;html代表网页
     msg.attach(MIMEText(body, _subtype='html', _charset='utf-8'))
     # 二进制方式模式文件
-    report_path = 'F:\\PyTesting\\AutoTset\\report\\'
+    report_path = 'F:\\PyTesting\\AutoTest\\report\\'
     attachment = new_file(report_path)
     attachment1 = os.path.basename(new_file(report_path))
     with open(attachment, 'rb') as f:
@@ -69,7 +69,7 @@ def sendMail(body):
 
 
 if __name__ == "__main__":
-    report_path = 'F:\\PyTesting\\AutoTset\\report\\'
+    report_path = 'F:\\PyTesting\\AutoTest\\report\\'
     attachment = new_file(report_path)
     f = open(attachment, 'rb')
     mail_body = f.read()

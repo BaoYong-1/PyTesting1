@@ -91,7 +91,7 @@ def export(sql, outputpath):
 
 # 结果测试
 if __name__ == "__main__":
-    scrpath = 'F:\\PyTesting\\AutoTset\\log\\excel\\'  # 指定的保存目录
+    scrpath = 'F:\\PyTesting\\AutoTest\\log\\excel\\'  # 指定的保存目录
     export(
         "select p.v_user_account,q.v_targ_name from GPS_USER p,GPS_TARG q where p.v_dept_id=q.v_dept_id and p.v_user_account='baoyong123'",
         scrpath + r'datetest.xlsx')

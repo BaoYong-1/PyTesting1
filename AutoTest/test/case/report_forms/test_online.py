@@ -9,7 +9,8 @@ import cx_Oracle
 import unittest
 from openpyxl import Workbook
 import sys
-sys.path.append('F:\\PyTesting\\AutoTset\\public')
+
+sys.path.append('F:\\PyTesting\\AutoTest\\public')
 from Login_c import login
 from GetVerifyCode import get_code
 from Data_Comp import test_read_excel
@@ -106,7 +107,7 @@ class Test_online(unittest.TestCase):
         wbk = xlwt.Workbook(encoding='utf-8', style_compression=0)
         # 创建工作表
         sheet = wbk.add_sheet('Web_data', cell_overwrite_ok=True)
-        excel = r"F:\PyTesting\AutoTset\log\excel\GPS_TARG.xls"
+        excel = r"F:\PyTesting\AutoTest\log\excel\GPS_TARG.xls"
         table_rows = driver.find_element_by_xpath(
             "//*[@id='_T202758']/td/div/div[1]/table").find_elements_by_tag_name('tr')
         row = 20
@@ -132,7 +133,7 @@ class Test_online(unittest.TestCase):
     def test_4get_dbdata(cls):
         '''获取数据库中的数据'''
         sql = "select p.v_user_account,q.v_targ_name from GPS_USER p,GPS_TARG q where p.v_dept_id=q.v_dept_id and p.v_user_account='baoyong123'"
-        scrpath = "F:\\PyTesting\\AutoTset\\log\\excel\\"  # 指定的保存目录
+        scrpath = "F:\\PyTesting\\AutoTest\\log\\excel\\"  # 指定的保存目录
         export(sql, scrpath + r'GPS_TARG_DB.xlsx')
         # conn = cx_Oracle.connect('gpsadmin/gpsadmin_123654@ 192.168.10.110: 1521 / ora11g')  # 连接数据库
         # cursor = conn.cursor()
@@ -158,7 +159,7 @@ class Test_online(unittest.TestCase):
         # for row in range(1, len(results) + 1):
         #     for col in range(0, len(fields)):
         #         sheet.write(row, col, u'%s' % results[row - 1][col])
-        # scrpath = 'F:\\PyTesting\\AutoTset\\log\\excel\\'  # 指定的保存目录
+        # scrpath = 'F:\\PyTesting\\AutoTest\\log\\excel\\'  # 指定的保存目录
         # workbook.save(scrpath + r'GPS_TARG_DB.xlsx')
         # cursor.close()
         # conn.close()
