@@ -61,7 +61,7 @@ def sendMail(body):
         s.connect(smtp_server, "25")
         s.login(from_mail, mail_pass)
         s.sendmail(from_mail, to_mail, msg.as_string())  # as_string()把MIMEText对象变成str
-        print('%s----发送邮件成功' % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+        print('%s----发送邮件成功------' % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
         s.quit()
     except Exception as err:
         print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
