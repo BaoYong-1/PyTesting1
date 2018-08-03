@@ -3,9 +3,8 @@ import os
 
 
 class ReadConfigFile(object):
-    def __init__(self, section, item):  # 初始化函数
+    def __init__(self, section):  # 初始化函数
         self.section = section
-        self.item = item
 
     # def get_value(self):
     #     root_dir = os.path.dirname(os.path.abspath('.'))  # 获取项目的绝对路径
@@ -36,13 +35,12 @@ class ReadConfigFile(object):
         config_dir = 'F:\PyTesting\AutoTest\config\config.ini'  # 如果需要调用该函数，需要写配置文件的绝对路径
         config = configparser.ConfigParser()  # ConfigParser.py文件名与ConfigParser()需要一致
         config.read(config_dir, encoding="utf-8")
-        value = config.get(self.section, self.item)
-        item_list = config.items('TestReport')
-        print(item_list)
-        print(value)
+        # value = config.get(self.section, self.item)
+        value = config.items(self.section)
+        # print(item_list[0][1])
         return value
 
 
-if __name__ == "__main__":  # 测试函数
-    read = ReadConfigFile("TestReport", "title")
+if __name__ == "__main__":  # 测试
+    read = ReadConfigFile("TestReport")
     testdata = read.get_config_value()

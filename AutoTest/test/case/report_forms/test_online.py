@@ -15,15 +15,20 @@ from Login_c import login
 from GetVerifyCode import get_code
 from Data_Comp import test_read_excel
 from Get_DB_Data import export
+from ConfigParser import ReadConfigFile
 
 
 class Test_online(unittest.TestCase):
+    ''' 上离线报表查询测试'''
     @classmethod
     def setUpClass(cls):
         print("开始测试")
         cls.driver = webdriver.Chrome()
         cls.driver.maximize_window()
-        cls.driver.get('http://192.168.10.110:8080/WebGis/login')
+        read = ReadConfigFile("TestUrl")
+        item_list = read.get_config_value()
+        url = item_list[0][1]
+        cls.driver.get(url)
         time.sleep(5)
 
     @classmethod

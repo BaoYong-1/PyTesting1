@@ -28,6 +28,7 @@ def get_code(driver):
     capturename1 = '\\' + 'getVerifyCode.png'  # 自定义命名截图
     wholepath1 = scrpath + capturename1
     imgry.save(wholepath1)
+    i.close()
     im = Image.open(wholepath1)
     im = im.convert('L')  # 图像加强，二值化
     sharpness = ImageEnhance.Contrast(im)  # 对比度增强
@@ -39,10 +40,6 @@ def get_code(driver):
     # 使用image_to_string识别验证码
     CodeText = image_to_string(newVerify).strip()
     # text = image_to_string('newVerifyCode.png').strip()
-    i.close()
-    im.close()
-    newVerify.close()
-
     print("获取登录验证码：", CodeText)
     return CodeText
 

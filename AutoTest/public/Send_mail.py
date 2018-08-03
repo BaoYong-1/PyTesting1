@@ -9,6 +9,10 @@ from email.header import Header
 from email import encoders
 from email.mime.base import MIMEBase
 from email.utils import parseaddr, formataddr
+import sys
+
+sys.path.append('F:\\PyTesting\\AutoTest\\public')
+from ConfigParser import ReadConfigFile
 
 
 def new_file(test_dir):
@@ -30,16 +34,20 @@ def formatAddr(s):
 
 
 def sendMail(body):
+    read = ReadConfigFile("TestReport")
+    item_list = read.get_config_value()
+    mail_addr = item_list[3][1]
+    head = item_list[4][1]
     smtp_server = 'smtp.163.com'
     from_mail = '13678678012@163.com'
     mail_pass = '13678678012by'
-    to_mail = ['534138762@qq.com', 'baoyong@sdgakj.com']
+    to_mail = [item_list[3][1]]
     # 构造一个MIMEMultipart对象代表邮件本身
     msg = MIMEMultipart()
     # Header对中文进行转码
     msg['From'] = formatAddr('测试部 <%s>' % from_mail)
     msg['To'] = ','.join(to_mail)
-    msg['Subject'] = Header('卫星定位平台BS自动化测试报告', 'utf-8')
+    msg['Subject'] = Header(item_list[4][1], 'utf-8')
     # plain代表纯文本;html代表网页
     msg.attach(MIMEText(body, _subtype='html', _charset='utf-8'))
     # 二进制方式模式文件

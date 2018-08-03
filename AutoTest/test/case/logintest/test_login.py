@@ -5,11 +5,13 @@ import sys
 
 sys.path.append('F:\\PyTesting\\AutoTest\\public')
 from GetVerifyCode import get_code
+from ConfigParser import ReadConfigFile
 import time
 import cx_Oracle
 
 
-class Test(unittest.TestCase):
+class Test_login(unittest.TestCase):
+    ''' 登录测试'''
     @classmethod
     def setUpClass(cls):
         print("开始测试")
@@ -22,7 +24,10 @@ class Test(unittest.TestCase):
         print("开始单个测试用例")
         self.dr = webdriver.Chrome()
         self.dr.maximize_window()
-        self.dr.get('http://192.168.10.110:8080/WebGis/login')
+        read = ReadConfigFile("TestUrl")
+        item_list = read.get_config_value()
+        url = item_list[0][1]
+        self.dr.get(url)
         time.sleep(5)
 
     def tearDown(self):
