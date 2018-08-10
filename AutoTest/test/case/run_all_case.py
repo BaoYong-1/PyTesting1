@@ -9,16 +9,14 @@ from Send_mail import sendMail
 from Send_mail import new_file
 from ConfigParser import ReadConfigFile
 
-
-
 def createsuit():
     # 创建测试用例集
     testcase = unittest.TestSuite()
     # discover方法定义
     # discover方法筛选出来的用例，循环添加到测试套件中
-    top_dir = "\\PyTesting\\AutoTest\\test\\"
-    case_dir = "case"
-    test_dir = 'F:\PyTesting\AutoTest\\test\case\loginouttest'
+    top_dir = "\\PyTesting\\AutoTest\\test\\"  # top_level_dir ，测试用例上级目录，要执行case下所有用例，需加上该路径
+    case_dir = "case"  # 测试用例路径
+    test_dir = 'F:\\PyTesting\\AutoTest\\test\\case\\report_forms\\'
     discover = unittest.defaultTestLoader.discover(test_dir, pattern='test_*.py', top_level_dir=None)
     # 判断是否为测试用例，自动加载测试用例到测试套件中
     for test_suite in discover:

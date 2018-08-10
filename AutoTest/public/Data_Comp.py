@@ -6,10 +6,10 @@ l_p = []  # 定义两个全局list，分别存储原始和目的需要对比的�
 l_t = []
 
 
-def test_read_excel():
+def test_read_excel(wb_p, wb_t, result_name):
     scrpath = 'F:\\PyTesting\\AutoTest\\log\\excel\\'
-    wb_pri = xlrd.open_workbook(scrpath + 'GPS_TARG.xls')  # 打开原始文件
-    wb_tar = xlrd.open_workbook(scrpath + 'GPS_TARG_DB.xlsx')  # 打开目标文件
+    wb_pri = xlrd.open_workbook(wb_p)  # 打开原始文件
+    wb_tar = xlrd.open_workbook(wb_t)  # 打开目标文件
     wb_result = xlwt.Workbook()  # 新建一个文件，用来保存结果
     sheet_result = wb_result.add_sheet('Como_result', cell_overwrite_ok=True)
     result_i = 0
@@ -39,8 +39,8 @@ def test_read_excel():
         sheet_result.write(result_j, 3, td_i)
 
     # 好了，可以去名为result的excel中查看结果了
-    wb_result.save(scrpath + 'Comp_result.xls')
-    excle = xlrd.open_workbook(scrpath + 'Comp_result.xls')
+    wb_result.save(scrpath + result_name)
+    excle = xlrd.open_workbook(scrpath + result_name)
     sheet = excle.sheets()[0]  # 获取第0个表
     n = sheet.nrows
     if n >= 3:

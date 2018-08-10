@@ -1,22 +1,33 @@
-import os
+# coding:utf-8
+import unittest
+from selenium import webdriver
+import sys
 
-filter = ['.py']  # 设置过滤后的文件类型 当然可以设置多个类型
+sys.path.append('F:\\PyTesting\\AutoTest\\public')
+from GetVerifyCode import get_code
+from ConfigParser import ReadConfigFile
+import time
+import cx_Oracle
+from Get_DB_Data import export
+import time, datetime
+
+global scrpath, begin_time, end_time
+scrpath = 'F:\\PyTesting\\AutoTest\\log\\excel\\'  # 指定的保存目录
+read = ReadConfigFile("SQL")
+item_list = read.get_config_value()
+begin_time = item_list[0][1]
+end_time = item_list[1][1]
 
 
-def all_path(dirname):
-    result = []  # 所有的文件
+def test_004():
+    '''测B10004'''
+    print(begin_time)
+    user = 'baoyong123'
+    sql004 = "select * from OPERATING_COMMAND_MSG t where t.v_equipment_id='0000013100000004' and t.v_text_send like '%疲劳%' and t.d_time between to_date('" + begin_time + "','yyyy-mm-dd hh24:mi:ss') and to_date('2018/06/22 23:59:59','yyyy-mm-dd hh24:mi:ss')"
 
-    for maindir, subdir, file_name_list in os.walk(dirname):
-
-        # print("1:",maindir) #当前主目录
-        # print("2:",subdir) #当前主目录下的所有目录
-        # print("3:",file_name_list)  #当前主目录下的所有文件
-
-        for filename in file_name_list:
-            apath = os.path.join(maindir, filename)  # 合并成一个完整路径
-            ext = os.path.split(apath)[0]
-            result.append(ext)
-    return result
+    sql = "select t.v_user_name from GPS_USER t where t.v_user_account='%s'" % user
+    export(sql004, scrpath + '测B10004.xlsx')
 
 
-print(all_path("F:\PyTesting\AutoTset\\test\\case"))
+if __name__ == "__main__":
+    test_004()

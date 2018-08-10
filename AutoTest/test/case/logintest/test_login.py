@@ -2,7 +2,6 @@
 import unittest
 from selenium import webdriver
 import sys
-
 sys.path.append('F:\\PyTesting\\AutoTest\\public')
 from GetVerifyCode import get_code
 from ConfigParser import ReadConfigFile

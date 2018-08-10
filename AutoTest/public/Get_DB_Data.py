@@ -8,7 +8,7 @@ os.environ['NLS_LANG'] = 'SIMPLIFIED CHINESE_CHINA.UTF8'  # 设置中文
 def export(sql, outputpath):
     conn = cx_Oracle.connect('gpsadmin/gpsadmin_123654@ 192.168.10.110: 1521 / ora11g')  # 连接数据库
     cursor = conn.cursor()
-    count = cursor.execute(sql)
+    cursor.execute(sql)
     # 重置游标的位置
     # cursor.scroll(0,mode='absolute')
     # 搜取所有结果
@@ -27,7 +27,7 @@ def export(sql, outputpath):
         for col in range(0, len(fields)):
             sheet.write(row, col, u'%s' % results[row - 1][col])
     workbook.save(outputpath)
-    print("获取数据库数据成功！")
+    # print("获取数据库数据成功！")
 
 
 # 结果测试

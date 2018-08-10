@@ -9,6 +9,7 @@ import cx_Oracle
 import unittest
 from openpyxl import Workbook
 import sys
+
 sys.path.append('F:\\PyTesting\\AutoTest\\public')
 from Login_c import login
 from GetVerifyCode import get_code
@@ -16,9 +17,13 @@ from Data_Comp import test_read_excel
 from Get_DB_Data import export
 from ConfigParser import ReadConfigFile
 
+sys.path.append('F:\\PyTesting\\AutoTest\\test\\action')
+from base_action import BaseAction
 
-class Test_online(unittest.TestCase):
-    ''' 上离线报表查询测试'''
+
+class Test_warn(unittest.TestCase):
+    ''' 报警警告报表查询测试'''
+
     @classmethod
     def setUpClass(cls):
         print("开始测试")
@@ -49,21 +54,15 @@ class Test_online(unittest.TestCase):
         '''用户登录'''
         driver = cls.driver
         CodeText = get_code(driver)
-        login(driver, 'baoyong123', 'asdf1234', CodeText)  # 正确用户名和密码
-
-        driver.implicitly_wait(10)  # 隐式等待
-        username = driver.find_element_by_id("gps_main_username_span_w").text
-        conn = cx_Oracle.connect('gpsadmin/gpsadmin_123654@ 192.168.10.110: 1521 / ora11g')  # 连接数据库
-        cursor = conn.cursor()
-        cursor.execute("select t.v_user_name from GPS_USER t where t.v_user_account='baoyong123'")  # 引用定义变量
-        rows = cursor.fetchall()  # 得到所有数据集
-        for row in rows:
-            print("%s" % (row[0]))
-        try:
-            assert username == row[0]
-            print('登录成功！')
-        except AssertionError as e:
-            print('登录失败！')
+        # login(driver, 'baoyong123', 'asdf1234', CodeText)  # 正确用户名和密码
+        time.sleep(5)
+        test = BaseAction(driver)
+        read = ReadConfigFile("Login")
+        test.Input("id", "txt_username", "baoyong123")
+        test.Input("id", "txt_password", "asdf1234")
+        test.Input("id", "verifycode", CodeText)
+        test.Click("class_name", "button")
+        time.sleep(5)
 
     def test_2skip(cls):
         '''跳转到报表查询界面'''
@@ -71,7 +70,7 @@ class Test_online(unittest.TestCase):
         driver.find_element_by_id("gps_toolbar_leftbutton_div_w").click()
         driver.find_element_by_id("gps_main_menu_report_s_p").click()
         time.sleep(2)  # 等待元素加载
-        driver.find_element_by_xpath("//*[@id='online']//div[1]//li[2]/a").click()
+        driver.find_element_by_id("id201286").click()
         time.sleep(2)
         print("页面跳转成功！")
 
@@ -79,28 +78,28 @@ class Test_online(unittest.TestCase):
         '''分页跳转,获取分页中的所有数据'''
         driver = cls.driver
         pages = driver.find_element_by_xpath(
-            "//*[@id='_T202758']/td/div/div[3]/div/div/table/tbody/tr").find_elements_by_tag_name("td")
+            "//*[@id='_T201286']/td/div/div[3]/div/div/table/tbody/tr").find_elements_by_tag_name("td")
         t = len(pages)
         # print(t)
         if t - 7 <= 9:
             for i in range(t - 7):
                 driver.find_element_by_xpath(
-                    "//*[@id='_T202758']/td/div/div[3]/div/div/table/tbody/tr/td[3]/div/table/tbody/tr/td[" + str(
+                    "//*[@id='_T201286']/td/div/div[3]/div/div/table/tbody/tr/td[3]/div/table/tbody/tr/td[" + str(
                         i + 1) + "]/div").click()
                 time.sleep(3)
                 driver.find_element_by_xpath(
-                    "//*[@id='_T202758']/td/div/div[3]/div/div/table/tbody/tr/td[3]/div/table/tbody/tr/td[" + str(
+                    "//*[@id='_T201286']/td/div/div[3]/div/div/table/tbody/tr/td[3]/div/table/tbody/tr/td[" + str(
                         i + 1) + "]/div")
                 cls.load_Table(i)
                 print("获取报表第" + str(i + 1) + "页数据成功！")
         else:
             for i in range(t - 7):
                 driver.find_element_by_xpath(
-                    "//*[@id='_T202758']/td/div/div[3]/div/div/table/tbody/tr/td[4]/div/table/tbody/tr/td[" + str(
+                    "//*[@id='_T201286']/td/div/div[3]/div/div/table/tbody/tr/td[4]/div/table/tbody/tr/td[" + str(
                         i + 1) + "]/div").click()
                 time.sleep(3)
                 driver.find_element_by_xpath(
-                    "//*[@id='_T202758']/td/div/div[3]/div/div/table/tbody/tr/td[4]/div/table/tbody/tr/td[" + str(
+                    "//*[@id='_T201286']/td/div/div[3]/div/div/table/tbody/tr/td[4]/div/table/tbody/tr/td[" + str(
                         i + 1) + "]/div")
                 cls.load_Table(i)
 
@@ -111,9 +110,9 @@ class Test_online(unittest.TestCase):
         wbk = xlwt.Workbook(encoding='utf-8', style_compression=0)
         # 创建工作表
         sheet = wbk.add_sheet('Web_data', cell_overwrite_ok=True)
-        excel = r"F:\PyTesting\AutoTest\log\excel\GPS_TARG.xls"
+        excel = r"F:\PyTesting\AutoTest\log\excel\Warn_TARG.xls"
         table_rows = driver.find_element_by_xpath(
-            "//*[@id='_T202758']/td/div/div[1]/table").find_elements_by_tag_name('tr')
+            "//*[@id='_T201286']/td/div/div[1]/table").find_elements_by_tag_name('tr')
         row = 20
         for i, tr in enumerate(table_rows):  # enumerate()是python的内置函数.enumerate多用于在for循环中得到计数
             if i == 0 and page == 0:
@@ -136,42 +135,17 @@ class Test_online(unittest.TestCase):
 
     def test_4get_dbdata(cls):
         '''获取数据库中的数据'''
-        sql = "select p.v_user_account,q.v_targ_name from GPS_USER p,GPS_TARG q where p.v_dept_id=q.v_dept_id and p.v_user_account='baoyong123'"
+        sql = "select h.v_targ_id,h.v_targ_name,t.n_warn_type,t.d_warn_date  from GPS_TARG h,WARN_HISTORY t where h.v_targ_id= t.v_targ_id and t.d_warn_date between " \
+              "to_date('2018-08-08 00:00:00','yyyy-mm-dd hh24:mi:ss') and to_date('2018-08-08 23:59:59','yyyy-mm-dd hh24:mi:ss')"
         scrpath = "F:\\PyTesting\\AutoTest\\log\\excel\\"  # 指定的保存目录
-        export(sql, scrpath + r'GPS_TARG_DB.xlsx')
-        # conn = cx_Oracle.connect('gpsadmin/gpsadmin_123654@ 192.168.10.110: 1521 / ora11g')  # 连接数据库
-        # cursor = conn.cursor()
-        # count = cursor.execute(
-        #     "select p.v_user_account,q.v_targ_name from GPS_USER p,GPS_TARG q where p.v_dept_id=q.v_dept_id and p.v_user_account='baoyong123'")
-        # # 重置游标的位置
-        # # cursor.scroll(0,mode='absolute')
-        # # 搜取所有结果
-        # results = cursor.fetchall()
-        #
-        # # 获取oracle里面的数据字段名称
-        # fields = cursor.description
-        # workbook = xlwt.Workbook()
-        # sheet = workbook.add_sheet('DB_data', cell_overwrite_ok=True)
-        #
-        # # 写上字段信息
-        # for field in range(0, len(fields)):
-        #     sheet.write(0, field, fields[field][0])
-        #
-        # # 获取并写入数据段信息
-        # row = 1
-        # col = 0
-        # for row in range(1, len(results) + 1):
-        #     for col in range(0, len(fields)):
-        #         sheet.write(row, col, u'%s' % results[row - 1][col])
-        # scrpath = 'F:\\PyTesting\\AutoTest\\log\\excel\\'  # 指定的保存目录
-        # workbook.save(scrpath + r'GPS_TARG_DB.xlsx')
-        # cursor.close()
-        # conn.close()
+        export(sql, scrpath + r'WARN_TARG_DB.xlsx')
         print("获取数据库数据成功！")
 
-    def test_5comp_data(cls):
-        '''上离线报表数据查询验证'''
-        test_read_excel()
+    def test_5get_dbdata(cls):
+        '''报警警告报表数据查询验证'''
+        excel = "F:\\PyTesting\\AutoTest\\log\\excel\\Warn_TARG.xls"
+        excel1 = "F:\\PyTesting\\AutoTest\\log\\excel\\WARN_TARG_DB.xlsx"
+        test_read_excel(excel, excel1, "Warn_Result.xlsx")
 
     def test_6login_out(cls):
         '''退出登录'''
