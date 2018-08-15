@@ -45,13 +45,14 @@ class BaseAction(object):
         self.driver.implicitly_wait(seconds)
 
     # 保存图片
-    def get_windows_img(self):
+    def get_windows_img(self, name):
         """
         在这里我们把file_path这个参数写死，直接保存到我们项目根目录的一个文件夹.\Screenshots下
         """
-        file_path = os.path.dirname(os.path.abspath('.')) + '/screenshots/'
+        # file_path = os.path.dirname(os.path.abspath('.')) + '/screenshots/'
+        file_path = "F:\\PyTesting\\AutoTest\\log\\png\\"
         rq = time.strftime('%Y%m%d%H%M', time.localtime(time.time()))
-        screen_name = file_path + rq + '.png'
+        screen_name = file_path + name + rq + '.png'
         try:
             self.driver.get_screenshot_as_file(screen_name)
         except NameError as e:
@@ -128,6 +129,18 @@ class BaseAction(object):
         elif type == "partial_link_text":
             self.driver.find_element_by_partial_link_text(value)
 
+        # 获取元素text
+        def Get_text(self, type, value):
+            if type == "xpath":
+                self.driver.find_element_by_xpath(value).text
+            elif type == "id":
+                self.driver.find_element_by_id(value).text
+            elif type == "name":
+                self.driver.find_element_by_name(value).text
+            elif type == "link_text":
+                self.driver.find_element_by_link_text(value).text
+            elif type == "partial_link_text":
+                self.driver.find_element_by_partial_link_text(value).text
     # 获取子元素
     def Select_child_elements(self, type, value1, value2):
         if type == "xpath":

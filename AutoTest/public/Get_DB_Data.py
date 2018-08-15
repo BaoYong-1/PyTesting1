@@ -16,7 +16,7 @@ def export(sql, outputpath):
     # 获取MYSQL里面的数据字段名称
     fields = cursor.description
     workbook = xlwt.Workbook()
-    sheet = workbook.add_sheet('sheet 1', cell_overwrite_ok=True)
+    sheet = workbook.add_sheet('db_sheet', cell_overwrite_ok=True)
     # 写上字段信息
     for field in range(0, len(fields)):
         sheet.write(0, field, fields[field][0])
@@ -29,6 +29,14 @@ def export(sql, outputpath):
     workbook.save(outputpath)
     # print("获取数据库数据成功！")
 
+
+def execute(sql):
+    conn = cx_Oracle.connect('gpsadmin/gpsadmin_123654@ 192.168.10.110: 1521 / ora11g')  # 连接数据库
+    cursor = conn.cursor()
+    cursor.execute(sql)
+    conn.commit()  # 这里一定要commit才行，要不然数据是不会插入的
+    cursor.close()
+    conn.close()
 
 # 结果测试
 if __name__ == "__main__":

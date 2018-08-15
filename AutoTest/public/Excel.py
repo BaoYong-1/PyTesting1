@@ -2,8 +2,6 @@
 from openpyxl import Workbook
 from openpyxl import load_workbook
 from openpyxl.styles import Border, Side, Font
-
-
 class Excel(object):
 
     def __init__(self):

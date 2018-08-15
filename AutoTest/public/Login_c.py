@@ -3,6 +3,7 @@ import time
 from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 from GetVerifyCode import get_code
+import cx_Oracle
 import os
 os.environ['NLS_LANG'] = 'SIMPLIFIED CHINESE_CHINA.UTF8'  # 设置中文
 
@@ -27,7 +28,6 @@ def login(driver, username, password, CodeText):
     driver.find_element_by_id("verifycode").send_keys(CodeText)
     driver.find_element_by_class_name("button").click()
     time.sleep(2)
-
 if __name__ == '__main__':
     options = webdriver.ChromeOptions()
     options.add_experimental_option("excludeSwitches", ["ignore-certificate-errors"])

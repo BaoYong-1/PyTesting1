@@ -116,11 +116,13 @@ class Test_online(unittest.TestCase):
             "//*[@id='_T202758']/td/div/div[1]/table").find_elements_by_tag_name('tr')
         row = 20
         for i, tr in enumerate(table_rows):  # enumerate()是python的内置函数.enumerate多用于在for循环中得到计数
+            # 获取页面table中的标题
             if i == 0 and page == 0:
                 table_cols1 = tr.find_elements_by_tag_name('th')
                 for j, tc in enumerate(table_cols1):
                     sheet.write(i, j, tc.text)
                     wbk.save(excel)
+            # 获取页面table中的数据，进行拼接
             else:
                 table_cols2 = tr.find_elements_by_tag_name('td')
                 for j, tc in enumerate(table_cols2):
@@ -171,7 +173,9 @@ class Test_online(unittest.TestCase):
 
     def test_5comp_data(cls):
         '''上离线报表数据查询验证'''
-        test_read_excel()
+        excel1 = "F:\\PyTesting\\AutoTest\\log\\excel\\GPS_TARG_DB.xlsx"
+        excel2 = "F:\\PyTesting\\AutoTest\\log\\excel\\GPS_TARG.xls"
+        test_read_excel(1, excel1, excel1, "GPS_TARG_Result.xls")
 
     def test_6login_out(cls):
         '''退出登录'''
