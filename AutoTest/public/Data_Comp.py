@@ -3,11 +3,8 @@ import xlrd
 import xlwt
 import os
 import re  # 正则模块
-
-
 l_p = []  # 定义两个全局list，分别存储原始和目的需要对比的数据
 l_t = []
-
 
 def test_read_excel(n, wb_p, wb_t, result_name):
     scrpath = 'F:\\PyTesting\\AutoTest\\log\\excel\\'
@@ -47,7 +44,7 @@ def test_read_excel(n, wb_p, wb_t, result_name):
     excle = xlrd.open_workbook(scrpath + result_name)
     sheet = excle.sheets()[0]  # 获取第0个表
     n = sheet.nrows
-    if n >= 2:
+    if n > 2:
         # print("页面数据和数据库数据不一致！")
         flag = False
     else:
@@ -70,8 +67,6 @@ def del_row(excel_dir, new_dir):
     # 获取列数
     ncols = sheet1.ncols
     # print("列数：",ncols)
-    # 如图1，我们知道想要删除小面的空行、续表行、以及姓名行（第一行的姓名不能删除）
-    # 思路：1.我们去除不需要行的行数（即哪一行），也就是获取我们所需要行在第几行的一个列表；2.循环这个列表，获取我们所需要的行数据，写入对应的excel中
     # 定义空list
     rows_get = []
     # 循环行

@@ -7,7 +7,6 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
-
 # from Common.readdata import ReadData as R
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 sys.path.append(ROOT_DIR)
@@ -40,9 +39,35 @@ class BaseAction(object):
     def back(self):
         self.driver.back()
 
+    # 将页面滚动条拖到底部
+    def scrollLow(self, type, value):
+        if type == "xpath":
+            target = self.driver.find_element_by_xpath(value)
+            self.driver.execute_script("arguments[0].scrollIntoView();", target)
+        elif type == "class_name":
+            target = self.driver.find_element_by_class_name(value)
+            self.driver.execute_script("arguments[0].scrollIntoView();", target)
+        elif type == "id":
+            target = self.driver.find_element_by_id(value)
+            self.driver.execute_script("arguments[0].scrollIntoView();", target)
+        elif type == "name":
+            target = self.driver.find_element_by_name(value)
+            self.driver.execute_script("arguments[0].scrollIntoView();", target)
+        elif type == "link_text":
+            target = self.driver.find_element_by_link_text(value)
+            self.driver.execute_script("arguments[0].scrollIntoView();", target)
+        elif type == "partial_link_text":
+            target = self.driver.find_element_by_partial_link_text(value)
+            self.driver.execute_script("arguments[0].scrollIntoView();", target)
+
+
     # 隐式等待
     def wait(self, seconds):
         self.driver.implicitly_wait(seconds)
+
+    # 隐式等待
+    def Wait(self, seconds):
+        time.sleep(seconds)
 
     # 保存图片
     def get_windows_img(self, name):

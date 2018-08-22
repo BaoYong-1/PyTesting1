@@ -36,6 +36,22 @@ class Test_Plat(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        # 测试数据准备
+        sql1 = "insert into PLAT_POST_QUERY values('10432','80001','124','3','','123','自动化查岗333？',to_date('" + t_date + " 08:00:00', 'yyyy-mm-dd hh24:mi:ss')," \
+                                                                                                                        "'20180630100329000000000000009575','自动化应答333',to_date('" + t_date + " 08:04:59', 'yyyy-mm-dd hh24:mi:ss'),'0','')"
+        execute(sql1)
+        log.info("数据库插入一条今日数据")
+
+        sql2 = "insert into PLAT_POST_QUERY values('10432','80002','124','3','','123','自动化查岗222？',to_date('" + Yestoday + " 08:00:00', 'yyyy-mm-dd hh24:mi:ss')," \
+                                                                                                                          "'20180630100329000000000000009575','自动化应答222',to_date('" + Yestoday + " 08:03:00', 'yyyy-mm-dd hh24:mi:ss'),'0','')"
+        execute(sql2)
+        log.info("数据库插入一条昨日数据")
+
+        sql3 = "insert into PLAT_POST_QUERY values('10432','80003','124','3','','123','自动化查岗111？',to_date('" + last_month1 + " 08:00:00', 'yyyy-mm-dd hh24:mi:ss')," \
+                                                                                                                             "'20180630100329000000000000009575','自动化应答111',to_date('" + last_month1 + " 08:03:00', 'yyyy-mm-dd hh24:mi:ss'),'0','')"
+        execute(sql3)
+        log.info("数据库插入一条上月数据")
+
         log.info("开始测试")
         cls.driver = webdriver.Chrome()
         cls.driver.maximize_window()
@@ -126,26 +142,84 @@ class Test_Plat(unittest.TestCase):
         test.get_windows_img('查岗报表跳转成功')
         report_name = test.Get_text("xpath", "//*[@class='main_table']//li[2]/span[2]")
         try:
-            cls.assertEqual(report_name, '平台查岗报表1')
-        except Exception:
+            cls.assertEqual(report_name, '平台查岗报表')
+            log.info("跳转到查岗报表查询界面")
+        except AssertionError as e:
             print("找不到报表标题：", report_name)
-        log.info("跳转到平台查岗报表查询界面")
+            raise
 
     def test_3get_dbdata(cls):
-        '''获取数据库中上月数据'''
+        '''获取数据库中数据'''
         sql1 = "select z.v_plat_id,u.v_plat_name,z.d_time,z.v_info_content,z.v_ans_content,z.d_ans_time,h.v_user_name from PLAT_POST_QUERY z,GPS_PLAT u,GPS_USER h " \
                "where h.v_user_id=z.v_user_id and z.v_plat_id=u.v_plat_id and z.d_time between " \
                "to_date('" + last_month1 + " 00:00:01', 'yyyy-mm-dd hh24:mi:ss') and to_date('" + last_month2 + " 23:59:59', 'yyyy-mm-dd hh24:mi:ss')"
-
         scrpath = "F:\\PyTesting\\AutoTest\\log\\excel\\"  # 指定的保存目录
         export(sql1, scrpath + 'Plat_L_DB.xlsx')
         log.info("获取数据库上月数据")
 
-    def test_4last_month(cls):
-        '''查询系统上月数据'''
+        sql2 = "select z.v_plat_id,u.v_plat_name,z.d_time,z.v_info_content,z.v_ans_content,z.d_ans_time,h.v_user_name from PLAT_POST_QUERY z,GPS_PLAT u,GPS_USER h " \
+               "where h.v_user_id=z.v_user_id and z.v_plat_id=u.v_plat_id and z.d_time between " \
+               "to_date('" + t_date + " 00:00:01', 'yyyy-mm-dd hh24:mi:ss') and to_date('" + t_date + " 23:59:59', 'yyyy-mm-dd hh24:mi:ss')"
+        scrpath = "F:\\PyTesting\\AutoTest\\log\\excel\\"  # 指定的保存目录
+        export(sql2, scrpath + 'Plat_T_DB.xlsx')
+        log.info("获取数据库今日数据")
+
+        sql3 = "select z.v_plat_id,u.v_plat_name,z.d_time,z.v_info_content,z.v_ans_content,z.d_ans_time,h.v_user_name from PLAT_POST_QUERY z,GPS_PLAT u,GPS_USER h " \
+               "where h.v_user_id=z.v_user_id and z.v_plat_id=u.v_plat_id and z.d_time between " \
+               "to_date('" + Yestoday + " 00:00:01', 'yyyy-mm-dd hh24:mi:ss') and to_date('" + Yestoday + " 23:59:59', 'yyyy-mm-dd hh24:mi:ss')"
+        scrpath = "F:\\PyTesting\\AutoTest\\log\\excel\\"  # 指定的保存目录
+        export(sql3, scrpath + 'Plat_Y_DB.xlsx')
+        log.info("获取数据库昨日数据")
+
+    def test_4today(cls):
+        '''查询系统今日数据'''
         driver = cls.driver
         test = BaseAction(driver)
         test.Click("xpath", "//*[@id='platCheck_searchHeader']//td[1]/span[2]/span")
+        test.Click("id", "EasierUI_SELECT_platCheck_container1")
+        test.Click("xpath", "//*[@id='EasierUI_SELECT_platCheck_container1']//li[1]")
+        test.Click("id", "platCheck_submit")
+        log.info("查询今日数据")
+        test.wait(5)
+        cls.switch_page()
+        log.info("验证数据")
+        excel = "F:\\PyTesting\\AutoTest\\log\\excel\\Plat_Query.xls"
+        excel1 = "F:\\PyTesting\\AutoTest\\log\\excel\\Plat_T_DB.xlsx"
+        try:
+            cls.assertTrue(test_read_excel(3, excel, excel1, "Plat_T_Result.xlsx"))
+            log.info("数据查询成功！")
+        except AssertionError as e:
+            log.info("数据查询失败,页面数据和系统数据不一致！")
+            raise
+        test.wait(10)
+
+    def test_5yestoday(cls):
+        '''查询系统昨日数据'''
+        driver = cls.driver
+        test = BaseAction(driver)
+        # test.Click("xpath", "//*[@id='platCheck_searchHeader']//td[1]/span[2]/span")
+        test.Click("id", "EasierUI_SELECT_platCheck_container1")
+        test.Click("xpath", "//*[@id='EasierUI_SELECT_platCheck_container1']//li[2]")
+        test.Click("id", "platCheck_submit")
+        log.info("查询昨日数据")
+        test.wait(5)
+        cls.switch_page()
+        log.info("验证数据")
+        excel = "F:\\PyTesting\\AutoTest\\log\\excel\\Plat_Query.xls"
+        excel1 = "F:\\PyTesting\\AutoTest\\log\\excel\\Plat_Y_DB.xlsx"
+        try:
+            cls.assertTrue(test_read_excel(3, excel, excel1, "Plat_Y_Result.xlsx"))
+            log.info("数据查询成功！")
+        except AssertionError as e:
+            log.info("数据查询失败,页面数据和系统数据不一致！")
+            raise
+        test.wait(10)
+
+    def test_6last_month(cls):
+        '''查询系统上月数据'''
+        driver = cls.driver
+        test = BaseAction(driver)
+        # test.Click("xpath", "//*[@id='platCheck_searchHeader']//td[1]/span[2]/span")
         test.Click("id", "EasierUI_SELECT_platCheck_container1")
         test.Click("xpath", "//*[@id='EasierUI_SELECT_platCheck_container1']//li[5]")
         test.Click("id", "platCheck_submit")
@@ -161,27 +235,9 @@ class Test_Plat(unittest.TestCase):
         except AssertionError as e:
             log.info("数据查询失败,页面数据和系统数据不一致！")
             raise
+        test.wait(10)
 
-    # def test_5Yestoday(cls):   #     '''查询昨日数据'''
-    #     driver = cls.driver
-    #     test = BaseAction(driver)
-    #     #test.Click("xpath","//*[@id='warnData_searchHeader']/table/tbody/tr/td[1]")
-    #     test.Click("id","EasierUI_SELECT_warnData_container2")
-    #     test.Click("xpath","//*[@title='昨天']")
-    #     test.Click("id","staticData_submit")
-    #     test.wait(5)
-    #     log.info("查询昨天数据")
-    #     cls.switch_page()
-    #     log.info("验证数据")
-    #     excel = "F:\\PyTesting\\AutoTest\\log\\excel\\History_TARG.xls"
-    #     excel1 = "F:\\PyTesting\\AutoTest\\log\\excel\\History_Yes_DB.xlsx"
-    #     try:
-    #         cls.assertTrue(test_read_excel(0,excel, excel1, "Yes_Result.xlsx"))
-    #         print("数据查询成功！")
-    #     except AssertionError as e:
-    #         print("数据查询失败！")
-
-    def test_6login_out(cls):
+    def test_7login_out(cls):
         '''退出登录'''
         driver = cls.driver
         driver.find_element_by_id("gps_main_quit_span_w").click()

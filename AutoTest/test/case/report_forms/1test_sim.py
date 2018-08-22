@@ -127,8 +127,8 @@ class Test_SIM(unittest.TestCase):
         try:
             cls.assertEqual(report_name, 'SIM卡到期统计')
         except AssertionError as e:
-            print("找不到这个标题")
-        log.info("跳转到SIM卡到期统计报表查询界面")
+            print("找不到报表标题：", report_name)
+            raise
 
     def test_3get_dbdata(cls):
         '''获取数据库中的数据'''
@@ -158,7 +158,8 @@ class Test_SIM(unittest.TestCase):
             cls.assertTrue(test_read_excel(1, excel, excel1, "Sim_Result.xlsx"))
             print("数据查询成功！")
         except AssertionError as e:
-            print("数据查询失败！")
+            log.info("数据查询失败,页面数据和系统数据不一致！")
+            raise
 
     def test_6login_out(cls):
         '''退出登录'''

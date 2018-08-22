@@ -1,7 +1,5 @@
 import configparser
 import os
-
-
 class ReadConfigFile(object):
     def __init__(self, section):  # 初始化函数
         self.section = section
