@@ -6,7 +6,7 @@ os.environ['NLS_LANG'] = 'SIMPLIFIED CHINESE_CHINA.UTF8'  # 设置中文
 
 
 def export(sql, outputpath):
-    conn = cx_Oracle.connect('gpsadmin/gpsadmin_123654@ 192.168.10.110: 1521 / ora11g')  # 连接数据库
+    conn = cx_Oracle.connect('****************')  # 连接数据库
     cursor = conn.cursor()
     cursor.execute(sql)
     # 重置游标的位置
@@ -31,7 +31,7 @@ def export(sql, outputpath):
 
 
 def execute(sql):
-    conn = cx_Oracle.connect('gpsadmin/gpsadmin_123654@ 192.168.10.110: 1521 / ora11g')  # 连接数据库
+    conn = cx_Oracle.connect('***********************')  # 连接数据库
     cursor = conn.cursor()
     cursor.execute(sql)
     conn.commit()  # 这里一定要commit才行，要不然数据是不会插入的
