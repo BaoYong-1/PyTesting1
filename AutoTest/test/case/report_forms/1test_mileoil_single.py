@@ -16,7 +16,7 @@ from Logger import Log
 from Time import Time
 from Login_c import login
 from GetVerifyCode import get_code
-from Data_Comp import test_read_excel
+from Data_Comp import test_read_excel, del_row
 from Get_DB_Data import export, execute
 from ConfigParser import ReadConfigFile
 from Excel import Excel
@@ -88,7 +88,7 @@ class Test_Mile(unittest.TestCase):
         table_rows = driver.find_element_by_xpath(
             "//table[starts-with(@id, 'EaserUI_EditorTable_Body_')]").find_elements_by_tag_name('tr')
         # print(table_rows)
-        row = 21
+        row = 23
         for i, tr in enumerate(table_rows):  # enumerate()是python的内置函数.enumerate多用于在for循环中得到计数
             # 获取页面table中的标题
             if i == 0 and page == 0:
@@ -109,6 +109,7 @@ class Test_Mile(unittest.TestCase):
                     newWs.write(i + page * row, j, tc.text)
                     os.remove(excel)
                     newWb.save(excel)
+        # del_row(excel, excel)
 
     def test_1login(cls):
         '''用户登录'''

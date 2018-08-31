@@ -153,19 +153,21 @@ class BaseAction(object):
             self.driver.find_element_by_link_text(value)
         elif type == "partial_link_text":
             self.driver.find_element_by_partial_link_text(value)
+        else:
+            print("元素不存在！")
 
-        # 获取元素text
-        def Get_text(self, type, value):
-            if type == "xpath":
-                self.driver.find_element_by_xpath(value).text
-            elif type == "id":
-                self.driver.find_element_by_id(value).text
-            elif type == "name":
-                self.driver.find_element_by_name(value).text
-            elif type == "link_text":
-                self.driver.find_element_by_link_text(value).text
-            elif type == "partial_link_text":
-                self.driver.find_element_by_partial_link_text(value).text
+    # 获取元素text
+    def Get_text(self, type, value):
+        if type == "xpath":
+            self.driver.find_element_by_xpath(value).text
+        elif type == "id":
+            self.driver.find_element_by_id(value).text
+        elif type == "name":
+            self.driver.find_element_by_name(value).text
+        elif type == "link_text":
+            self.driver.find_element_by_link_text(value).text
+        elif type == "partial_link_text":
+            self.driver.find_element_by_partial_link_text(value).text
     # 获取子元素
     def Select_child_elements(self, type, value1, value2):
         if type == "xpath":
@@ -248,6 +250,10 @@ class BaseAction(object):
             self.driver.find_element_by_name(value).is_selected()
         elif type == "link_text":
             self.driver.find_element_by_link_text(value).is_selected()
+
+    # 执行JS
+    def Excecute_Script(self, value):
+        self.driver.execute_script(value)
 
 # if __name__ == '__main__':
 #     driver = webdriver.Chrome()

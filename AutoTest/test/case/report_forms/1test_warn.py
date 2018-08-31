@@ -54,25 +54,27 @@ class Test_warn(unittest.TestCase):
         '''用户登录'''
         driver = cls.driver
         CodeText = get_code(driver)
-        # login(driver, 'baoyong123', 'asdf1234', CodeText)  # 正确用户名和密码
-        time.sleep(5)
-        test = BaseAction(driver)
-        read = ReadConfigFile("Login")
-        test.Input("id", "txt_username", "baoyong123")
-        test.Input("id", "txt_password", "asdf1234")
-        test.Input("id", "verifycode", CodeText)
-        test.Click("class_name", "button")
-        time.sleep(5)
+        login(driver, 'baoyong123', 'asdf1234', CodeText)  # 正确用户名和密码
+        time.sleep(3)
+
+
 
     def test_2skip(cls):
         '''跳转到报表查询界面'''
         driver = cls.driver
-        driver.find_element_by_id("gps_toolbar_leftbutton_div_w").click()
-        driver.find_element_by_id("gps_main_menu_report_s_p").click()
+        test = BaseAction(driver)
+        test.Click("id", "gps_toolbar_leftbutton_div_w")
+        test.Click("id", "gps_main_menu_report_s_p")
         time.sleep(2)  # 等待元素加载
-        driver.find_element_by_id("id201286").click()
+        test.Click("id", "id201286")
         time.sleep(2)
-        print("页面跳转成功！")
+        report_name = test.Get_text("xpath", "//*[@id='rnavigation']/li[2]/span[2]")
+        try:
+            cls.assertEqual(report_name, '报警类型统计')
+            print("页面跳转成功！")
+        except AssertionError as e:
+            print("跳转失败，找不到报表标题：", report_name)
+            raise
 
     def test_3switch_page(cls):
         '''分页跳转,获取分页中的所有数据'''
@@ -92,16 +94,6 @@ class Test_warn(unittest.TestCase):
                         i + 1) + "]/div")
                 cls.load_Table(i)
                 print("获取报表第" + str(i + 1) + "页数据成功！")
-        else:
-            for i in range(t - 7):
-                driver.find_element_by_xpath(
-                    "//*[@id='_T201286']/td/div/div[3]/div/div/table/tbody/tr/td[4]/div/table/tbody/tr/td[" + str(
-                        i + 1) + "]/div").click()
-                time.sleep(3)
-                driver.find_element_by_xpath(
-                    "//*[@id='_T201286']/td/div/div[3]/div/div/table/tbody/tr/td[4]/div/table/tbody/tr/td[" + str(
-                        i + 1) + "]/div")
-                cls.load_Table(i)
 
     def load_Table(cls, page):
         '''获取报表页面数据'''

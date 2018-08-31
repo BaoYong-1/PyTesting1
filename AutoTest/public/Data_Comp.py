@@ -96,9 +96,9 @@ def del_row(excel_dir, new_dir):
                 if A0[0:2] == '编号':
                     # print("A0[0:2]:", A0[0:2])
                     pass
-                # 剔除姓名行
-                # elif A0[0:2] == '姓名':
-                #     pass
+                # # 剔除姓名行
+                elif A0[0:2] == '群发':
+                    pass
                 else:
                     rows_get.append(i)
                     # print("rows_get11:", rows_get)
@@ -126,6 +126,6 @@ if __name__ == '__main__':
     # excel = "F:\\PyTesting\\AutoTest\\log\\excel\\History_TARG.xls"
     # excel1 = "F:\\PyTesting\\AutoTest\\log\\excel\\History_Yes_DB.xlsx"
     # test_read_excel(0,excel, excel1, "Yes_Result.xlsx")
-    excel2 = "F:\\PyTesting\\AutoTest\\log\\excel\\Sim.xls"
-    excel3 = "F:\\PyTesting\\AutoTest\\log\\excel\\SIM1.xls"
+    excel2 = "F:\\PyTesting\\AutoTest\\log\\excel\\MSG1.xls"
+    excel3 = "F:\\PyTesting\\AutoTest\\log\\excel\\MSG2.xls"
     del_row(excel2, excel3)

@@ -9,6 +9,10 @@ class Time():
     # 今天
     today = (now).strftime('%Y/%m/%d %H:%M:%S')
     t_date = (now).strftime('%Y/%m/%d')
+    # 时间格式%Y-%m-%d 今天和往前推7天
+    t_date1 = (now).strftime('%Y-%m-%d')
+    t_date2 = (now - timedelta(days=7)).strftime('%Y-%m-%d')
+
 
     # 昨天
     yestoday = (now - timedelta(days=1)).strftime('%Y/%m/%d')
@@ -54,10 +58,10 @@ class Time():
 # 测试
 if __name__ == '__main__':
     time = Time()
-    print(time.today)
-    print(time.t_date)
-    print(time.yestoday)
-    print(time.last_week_start)
-    print(time.last_week_end)
+    print("今天：", time.today)
+    print("今天日期：", time.t_date2, time.t_date1)
+    print("昨天：", time.yestoday)
+    print("上周开始:", time.last_week_start)
+    print("上周结束:", time.last_week_end)
     print(time.last_month_start)
     print(time.last_month_end)

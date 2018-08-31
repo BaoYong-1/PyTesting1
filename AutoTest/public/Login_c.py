@@ -3,10 +3,8 @@ import time
 from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 from GetVerifyCode import get_code
-import cx_Oracle
 import os
 os.environ['NLS_LANG'] = 'SIMPLIFIED CHINESE_CHINA.UTF8'  # 设置中文
-
 
 def is_element_visible(self, element):
     driver = self.driver
@@ -17,7 +15,6 @@ def is_element_visible(self, element):
     except:
         flag = False
     return flag
-
 
 def login(driver, username, password, CodeText):
     driver.find_element_by_id("txt_username").clear()

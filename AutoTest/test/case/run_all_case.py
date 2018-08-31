@@ -16,7 +16,7 @@ def createsuit():
     # discover方法筛选出来的用例，循环添加到测试套件中
     top_dir = "\\PyTesting\\AutoTest\\test\\"  # top_level_dir ，测试用例上级目录，要执行case下所有用例，需加上该路径
     case_dir = "case"  # 测试用例路径
-    test_dir = 'F:\\PyTesting\\AutoTest\\test\\case\\report_forms\\'
+    test_dir = 'F:\\PyTesting\\AutoTest\\test\\case\\logintest\\'
     discover = unittest.defaultTestLoader.discover(test_dir, pattern='test_*.py', top_level_dir=None)
     # 判断是否为测试用例，自动加载测试用例到测试套件中
     for test_suite in discover:
@@ -37,8 +37,7 @@ if __name__ == "__main__":
     title = item_list[0][1]
     tester = item_list[1][1]
     description = item_list[2][1]
-    runner = HTMLTestRunnerCN.HTMLTestReportCN(stream=fp, title=title, description=description,
-                                               tester=tester)
+    runner = HTMLTestRunnerCN.HTMLTestReportCN(stream=fp, title=title, description=description, tester=tester)
     runner.run(createsuit())  # 运行测试容器中的用例，并将结果写入的报告中
     fp.close()  # 关闭文件流，不关的话生成的报告是空的
     attachment = new_file(report_path)
